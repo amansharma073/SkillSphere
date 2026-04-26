@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Link, NavLink } from 'react-router-dom'
 import { useApp } from '../context/AppContext'
+import UserDropdown from './UserDropdown'
 
 const NAV_LINKS = [
   { to: '/', label: 'Home' },
@@ -69,7 +70,8 @@ export default function Navbar() {
           </div>
 
           {/* Right side */}
-          <div className="flex items-center gap-2 flex-shrink-0">
+          <div className="relative flex items-center gap-2 flex-shrink-0">
+            {/* Dark mode toggle */}
             <button
               onClick={() => setDarkMode(!darkMode)}
               className="p-2.5 rounded-xl text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-violet-600 dark:hover:text-violet-400 transition-all duration-200 hover:scale-110 active:scale-95"
@@ -96,9 +98,9 @@ export default function Navbar() {
               Add Skill
             </Link>
 
-            {/* Mobile icons */}
+            {/* Mobile nav icons (home, explore, add) */}
             <div className="md:hidden flex items-center gap-0.5">
-              {MOBILE_ICONS.map(({ to, d }) => (
+              {MOBILE_ICONS.slice(0, 3).map(({ to, d }) => (
                 <NavLink
                   key={to}
                   to={to}
@@ -117,6 +119,9 @@ export default function Navbar() {
                 </NavLink>
               ))}
             </div>
+
+            {/* User dropdown — desktop popover + mobile bottom sheet */}
+            <UserDropdown />
           </div>
         </div>
       </div>

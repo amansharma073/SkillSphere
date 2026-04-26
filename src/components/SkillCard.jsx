@@ -1,6 +1,8 @@
+import { useState } from 'react'
 import Badge from './Badge'
 import { getUserBadges } from '../utils/badges'
 import { MOCK_USERS } from '../data/mockData'
+import SkillModal from './SkillModal'
 
 
 const CATEGORY_COLORS = {
@@ -21,6 +23,8 @@ const CATEGORY_EMOJI = {
 }
 
 export default function SkillCard({ skill }) {
+  const [modalOpen, setModalOpen] = useState(false)
+  const [activeSkill, setActiveSkill] = useState(skill)
   const colorClass = CATEGORY_COLORS[skill.category] || 'bg-gray-500/10 text-gray-600 dark:text-gray-400 ring-1 ring-gray-500/20'
   const emoji = CATEGORY_EMOJI[skill.category] || '🎯'
 
@@ -30,6 +34,14 @@ export default function SkillCard({ skill }) {
   const topBadge = badges[0] ?? null
 
   return (
+    <>
+    {modalOpen && (
+      <SkillModal
+        skill={activeSkill}
+        onClose={() => { setModalOpen(false); setActiveSkill(skill) }}
+        onOpenSkill={(s) => setActiveSkill(s)}
+      />
+    )}
     <div className="group relative bg-white dark:bg-gray-800/80 rounded-2xl overflow-hidden
                     shadow-sm hover:shadow-2xl hover:shadow-violet-500/10 dark:hover:shadow-violet-500/5
                     border border-gray-100 dark:border-gray-700/60
@@ -67,7 +79,10 @@ export default function SkillCard({ skill }) {
 
         {/* View Details — slides up on hover */}
         <div className="absolute inset-x-0 bottom-0 flex justify-center pb-4 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out">
-          <button className="flex items-center gap-1.5 px-5 py-2 bg-white/95 dark:bg-gray-900/95 text-violet-700 dark:text-violet-300 text-sm font-semibold rounded-xl shadow-lg hover:bg-white dark:hover:bg-gray-900 transition-colors">
+          <button
+            onClick={() => setModalOpen(true)}
+            className="flex items-center gap-1.5 px-5 py-2 bg-white/95 dark:bg-gray-900/95 text-violet-700 dark:text-violet-300 text-sm font-semibold rounded-xl shadow-lg hover:bg-white dark:hover:bg-gray-900 transition-colors"
+          >
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
@@ -115,5 +130,6 @@ export default function SkillCard({ skill }) {
         </div>
       </div>
     </div>
+    </>
   )
 }
